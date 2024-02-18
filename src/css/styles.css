@@ -138,3 +138,28 @@
   justify-content: center;
   margin-right: 10px;
 }
+.loadMoreButton {
+  padding: 8px 16px;
+  justify-content: center;
+  border-radius: 8px;
+  background: #4E75FF;
+  border-style: none;
+  margin-left: 8px;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.64px;
+  position: relative;
+  display: block;
+  margin: 40px auto;
+}
+
+.loadMoreButton:hover {
+  background: #6C8CFF;
+}
+
+.isHidden {
+  display: none;
+}
