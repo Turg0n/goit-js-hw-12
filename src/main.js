@@ -14,7 +14,7 @@ let imageArray;
 let totalHits=0;
 let inputValue='';
 let galleryDll;
-
+const perPage = 40
 document.addEventListener('DOMContentLoaded', function() {
     openLightbox();
 });
@@ -25,14 +25,14 @@ loadMoreButton.addEventListener('click', e => {
     showHidemessageLoad();
     getImage(inputValue)
     .then(posts => {
-    imageArray = posts;
-    if (imageArray.length === 0) {
-        showHidemessageLoad();
-        iziToast.error({
-        message:
-            'There are no images matching your search query. Please try again!',
-        position: 'topRight',
-        });
+        imageArray = posts;
+        if (imageArray.length === 0) {
+            showHidemessageLoad();
+            iziToast.error({
+            message:
+                'There are no images matching your search query. Please try again!',
+            position: 'topRight',
+            });
         render();
         loadMoreButton.classList.add('isHidden');
         } else {
@@ -63,6 +63,7 @@ myForm.addEventListener('submit', e => {
     return;
     } else {
     currentPages = 1;
+    imageArray = [];
     showHidemessageLoad();
     getImage(inputValue)
         .then(posts => {
@@ -76,7 +77,7 @@ myForm.addEventListener('submit', e => {
             });
             render();
             loadMoreButton.classList.add('isHidden');
-        } else if (totalHits <= 15) {
+        } else if (totalHits <= perPage) {
             showHidemessageLoad();
             render();
             loadMoreButton.classList.add('isHidden');
@@ -161,10 +162,10 @@ function controlEndsOfImage() {
 
 function openLightbox() {
     let options = {
-    captionsData: 'alt',
-    captionDelay: 250,
-    captions: true,
-    };
+        captionsData: 'alt',
+        captionDelay: 250,
+        captions: true,
+        };
     galleryDll = new SimpleLightbox('.gallery a', options);
     galleryDll.on('show.simplelightbox', function () {});
     galleryDll.refresh();
