@@ -14,43 +14,11 @@ let imageArray;
 let totalHits=0;
 let inputValue='';
 let galleryDll;
-const perPage = 40
+const perPage = 15;
+
 document.addEventListener('DOMContentLoaded', function() {
     openLightbox();
 });
-
-loadMoreButton.addEventListener('click', e => {
-    const galleryCardHeight = document.querySelector('.gallery-item').getBoundingClientRect().height;
-    currentPages += 1;
-    showHidemessageLoad();
-    getImage(inputValue)
-    .then(posts => {
-        imageArray = posts;
-        if (imageArray.length === 0) {
-            showHidemessageLoad();
-            iziToast.error({
-            message:
-                'There are no images matching your search query. Please try again!',
-            position: 'topRight',
-            });
-        render();
-        loadMoreButton.classList.add('isHidden');
-        } else {
-        showHidemessageLoad();
-        loadMoreButton.classList.remove('isHidden');
-        imageArray.push(...posts);
-        render(true);
-        controlEndsOfImage();
-        
-        galleryDll.refresh();
-        window.scrollBy({
-        top: galleryCardHeight * 2,
-        behavior: 'smooth'
-        });
-    }
-    })
-});
-
 myForm.addEventListener('submit', e => {
     e.preventDefault();
     const searchInput = document.getElementById('searchImage');
@@ -100,6 +68,40 @@ myForm.addEventListener('submit', e => {
     }
 });
 
+loadMoreButton.addEventListener('click', e => {
+    const galleryCardHeight = document.querySelector('.gallery-item').getBoundingClientRect().height;
+    currentPages += 1;
+    imageArray = [];
+    showHidemessageLoad();
+    getImage(inputValue)
+    .then(posts => {
+        imageArray = posts;
+        if (imageArray.length === 0) {
+            showHidemessageLoad();
+            iziToast.error({
+            message:
+                'There are no images matching your search query. Please try again!',
+            position: 'topRight',
+            });
+        render();
+        loadMoreButton.classList.add('isHidden');
+        } else {
+        showHidemessageLoad();
+        loadMoreButton.classList.remove('isHidden');
+        // imageArray.push(...posts);
+        render(true);
+        controlEndsOfImage();
+        galleryDll.refresh();
+        window.scrollBy({
+        top: galleryCardHeight * 2,
+        behavior: 'smooth'
+        });
+    }
+    })
+});
+
+
+
 async function getImage(inputValue) {
     const API_KEY = '42377778-b3c1271d36d2a7f0c3b2221f8';
     const URL =
@@ -107,7 +109,7 @@ async function getImage(inputValue) {
     API_KEY +
     '&q=' +
     encodeURIComponent(inputValue) +
-    '&image_type=photo&orientation=horizontal&safe_search=true&page='+currentPages+'&per_page=15&';
+    '&image_type=photo&orientation=horizontal&safe_search=true&page='+currentPages+'&per_page='+perPage;
     const response = await axios.get (URL, );
     totalHits = response.data.totalHits;
     return response.data.hits;
